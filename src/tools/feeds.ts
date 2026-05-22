@@ -1,10 +1,7 @@
+import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import type { FreshRSSClient } from "../freshrss.js";
 
-interface ToolResult {
-  content: Array<{ type: string; text: string }>;
-}
-
-export async function handleGetFeeds(client: FreshRSSClient, _args: object): Promise<ToolResult> {
+export async function handleGetFeeds(client: FreshRSSClient, _args: object): Promise<CallToolResult> {
   const feeds = await client.getFeeds();
 
   if (feeds.length === 0) {
@@ -15,6 +12,6 @@ export async function handleGetFeeds(client: FreshRSSClient, _args: object): Pro
   return text(`Found ${feeds.length} feed(s):\n\n${lines.join("\n\n")}`);
 }
 
-function text(content: string): ToolResult {
+function text(content: string): CallToolResult {
   return { content: [{ type: "text", text: content }] };
 }

@@ -14,7 +14,7 @@ describe("get_feeds tool", () => {
 
     expect(client.getFeeds).toHaveBeenCalledOnce();
     expect(result.content).toHaveLength(1);
-    const text = result.content[0].text as string;
+    const text = (result.content[0] as { type: "text"; text: string }).text;
     expect(text).toContain("Hacker News");
     expect(text).toContain("feed/1");
     expect(text).toContain("Dev.to");
@@ -24,7 +24,7 @@ describe("get_feeds tool", () => {
     const client = { getFeeds: vi.fn().mockResolvedValue([]) } as any;
     const result = await handleGetFeeds(client, {});
 
-    const text = result.content[0].text as string;
+    const text = (result.content[0] as { type: "text"; text: string }).text;
     expect(text).toContain("No feeds");
   });
 });

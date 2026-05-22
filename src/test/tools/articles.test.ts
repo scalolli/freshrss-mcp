@@ -27,7 +27,7 @@ describe("get_unread_articles tool", () => {
     const result = await handleGetUnreadArticles(client, {});
 
     expect(client.getUnreadArticles).toHaveBeenCalledWith({ limit: 20, feedId: undefined });
-    const text = result.content[0].text as string;
+    const text = (result.content[0] as { type: "text"; text: string }).text;
     expect(text).toContain("Article 1");
     expect(text).toContain("Article 2");
   });
@@ -43,7 +43,7 @@ describe("get_unread_articles tool", () => {
     const client = { getUnreadArticles: vi.fn().mockResolvedValue([]) } as any;
     const result = await handleGetUnreadArticles(client, {});
 
-    const text = result.content[0].text as string;
+    const text = (result.content[0] as { type: "text"; text: string }).text;
     expect(text).toContain("No unread");
   });
 });
@@ -58,7 +58,7 @@ describe("get_article_content tool", () => {
     const result = await handleGetArticleContent(client, { id: article.id });
 
     expect(client.getArticleContent).toHaveBeenCalledWith(article.id);
-    const text = result.content[0].text as string;
+    const text = (result.content[0] as { type: "text"; text: string }).text;
     expect(text).toContain("Article 42");
     expect(text).toContain("<p>Content 42</p>");
   });
@@ -74,7 +74,7 @@ describe("mark_as_read tool", () => {
     const result = await handleMarkAsRead(client, { ids });
 
     expect(client.markAsRead).toHaveBeenCalledWith(ids);
-    const text = result.content[0].text as string;
+    const text = (result.content[0] as { type: "text"; text: string }).text;
     expect(text).toContain("2");
   });
 });
@@ -89,7 +89,7 @@ describe("search_articles tool", () => {
     const result = await handleSearchArticles(client, { query: "typescript" });
 
     expect(client.searchArticles).toHaveBeenCalledWith("typescript", 20);
-    const text = result.content[0].text as string;
+    const text = (result.content[0] as { type: "text"; text: string }).text;
     expect(text).toContain("Article 99");
   });
 
@@ -97,7 +97,7 @@ describe("search_articles tool", () => {
     const client = { searchArticles: vi.fn().mockResolvedValue([]) } as any;
     const result = await handleSearchArticles(client, { query: "noresults" });
 
-    const text = result.content[0].text as string;
+    const text = (result.content[0] as { type: "text"; text: string }).text;
     expect(text).toContain("No articles");
   });
 });
