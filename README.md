@@ -45,6 +45,14 @@ npm run test:watch  # watch mode
 ## Docker
 
 ```bash
+cp .env.example .env  # fill in your credentials
+docker compose up
+```
+
+The image is published to `ghcr.io/scalolli/freshrss-mcp:latest` on every push to `main`.
+To build locally instead:
+
+```bash
 docker build -t freshrss-mcp .
 docker run -p 3000:3000 --env-file .env freshrss-mcp
 ```
