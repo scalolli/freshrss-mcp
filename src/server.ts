@@ -7,7 +7,9 @@ interface AppOptions {
 
 export function createApp({ apiKey, mcpHandler }: AppOptions) {
   const app = express();
-  app.use(express.json());
+  app.use(express.json({
+    verify: (req: any, _res, buf) => { req.rawBody = buf; },
+  }));
 
   const bearerAuth: RequestHandler = (req, res, next) => {
     const header = req.headers.authorization ?? "";

@@ -87,10 +87,15 @@ export class FreshRSSClient {
   }
 
   async getArticleContent(id: string): Promise<Article> {
-    const params = new URLSearchParams({ i: id, output: "json" });
+    const params = new URLSearchParams({ output: "json" });
+    params.append("i", id);
     const res = await fetch(
-      `${this.baseUrl}/api/greader.php/reader/api/0/stream/contents?${params}`,
-      { headers: this.authHeaders() }
+      `${this.baseUrl}/api/greader.php/reader/api/0/stream/items/contents`,
+      {
+        method: "POST",
+        headers: { ...this.authHeaders(), "Content-Type": "application/x-www-form-urlencoded" },
+        body: params.toString(),
+      }
     );
     if (!res.ok) throw new Error(`getArticleContent failed: ${res.status}`);
     const data = await res.json() as { items: StreamItem[] };
